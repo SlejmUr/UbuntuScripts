@@ -1,43 +1,44 @@
 #!/bin/bash
 
-sudo apt install nvidia-driver-470 -y
+# - Itt ird at ha mas driver kell!
+driver="nvidia-driver-470"
 
-# Felugro ablak ujrainditashoz NE TEGYEL SEHOVA #-et!
-zenity --question --text='Ujrainditas 10 masodperc mulva?' --width='300' --height='100'
-if [ $? = 0 ]; then
+if dpkg -s $driver>/dev/null
+then
+	echo "Installed,more nvidia things..."
 
-(
-echo "0" ; 
-echo "# Ujrainditas: 10" ; sleep 1
-echo "10" ; 
-echo "# Ujrainditas: 9" ; sleep 1
-echo "20" ; 
-echo "# Ujrainditas: 8" ; sleep 1
-echo "30" ; 
-echo "# Ujrainditas: 7" ; sleep 1
-echo "40" ; 
-echo "# Ujrainditas: 6" ; sleep 1
-echo "50" ; 
-echo "# Ujrainditas: 5" ; sleep 1
-echo "60" ; 
-echo "# Ujrainditas: 4" ; sleep 1
-echo "70" ; 
-echo "# Ujrainditas: 3" ; sleep 1
-echo "80" ; 
-echo "# Ujrainditas: 2" ; sleep 1
-echo "90" ; 
-echo "# Ujrainditas: 1" ; sleep 1
-) |
-zenity --progress \
-  --title="Minden Frissites Telepitve" --width='300' \
-  --text="Ujrainditas" \
-  --auto-close \
-  --no-cancel
-  sudo reboot;
-  
-fi
+	# - NVidia cuccok kezdete
+	echo NVidia cuccok kezdete
 
-if [ $? = 1 ]; then
+	# Azonnal megnyitja a Nvidia Control Panelt Admin jogokkal
+	# Ezzel legeneralod a config file-t amihez a kovetkezo sor lesz hozzaadva
+	sudo nvidia-settings
 
-	exit 0;
+	# Nvidia Control Panel OC Engedelyezes
+	sudo nvidia-xconfig -a --cool-bits=28
+
+	# Faszom se tudja mik ezek, de kellenek
+	sudo apt install libgconf-2-4 libappindicator1 libc++1 -y
+
+	# GreenWithEnvy Nvidia OC Tool
+	sudo apt install git meson python3-pip python3-setuptools libcairo2-dev libgirepository1.0-dev libglib2.0-dev libdazzle-1.0-dev gir1.2-gtksource-3.0 gir1.2-appindicator3-0.1 python3-gi-cairo appstream-util -y
+	git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+	cd gwe
+	git checkout release
+	sudo -H pip3 install -r requirements.txt
+	meson . build --prefix /usr
+	ninja -v -C build
+	sudo ninja -v -C build install
+	cd ..
+
+	echo NVidia cuccok vege
+	# - NVidia cuccok vege
+	./0restart.sh
+else
+	echo "Nem!"
+	echo $driver install
+
+	sudo apt install $driver -y
+	# - Restart
+	./0restart.sh
 fi
