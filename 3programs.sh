@@ -30,7 +30,8 @@ sudo apt install obs-studio -y
 echo heroic launcher install (EGS)
 # Epic Games Store Linuxos megfeleloje
 sudo apt install gawk libsigsegv2 -y
-sudo dpkg -i heroic_1.9.2_amd64.deb
+sudo curl https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v1.9.2/heroic_1.9.2_amd64.deb -o heroic.deb 
+sudo dpkg -i heroic.deb
 
 sudo apt --fix-broken install
 
