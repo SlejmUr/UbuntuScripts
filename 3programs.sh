@@ -30,6 +30,7 @@ sudo apt install obs-studio -y
 echo heroic launcher install (EGS)
 # Epic Games Store Linuxos megfeleloje
 sudo apt install gawk libsigsegv2 -y
+sudo apt install apt-transport-https curl
 sudo curl https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v1.9.2/heroic_1.9.2_amd64.deb -o heroic.deb 
 sudo dpkg -i heroic.deb
 
@@ -41,7 +42,6 @@ sudo apt install vlc
 
 echo Brave Bongeszo telepitoje
 # Brave Bongeszo Telepitoje
-sudo apt install apt-transport-https curl
 sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
 sudo apt update
